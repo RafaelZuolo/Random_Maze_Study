@@ -18,14 +18,14 @@ public class RandomExploreMaze {
     static final int left = 3;
     static final int PAUSE_TIME = 10;
 
-    public static char[][] generate(int h, int w) {
+    public static char[][] generate(int w, int h) {
         int realH = 2*h + 1;
         int realW = 2*w + 1;
-        int[][] visited = new int[h][w];
-        char[][] map = new char[realH][realW];
-        for (int i = 0; i < realH; i++) // all map is block
-            for (int j = 0; j < realW; j++)
-                map[i][j] = '#';
+        int[][] visited = new int[w][h];
+        char[][] map = new char[realW][realH];
+        for (int x = 0; x < realW; x++) // all map is block
+            for (int y = 0; y < realH; y++)
+                map[x][y] = '#';
         return recursiveExplore(map, visited);
     }
 
@@ -91,8 +91,8 @@ public class RandomExploreMaze {
 
     public static void printMap(char[][] map) {
         StdDraw.clear();
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[0].length; j++) {
+        for (int j = map[0].length-1; j >= 0; j--) {
+            for (int i = 0; i < map.length; i++) {
                 if (map[i][j] != '#') {
                     System.out.print(" ");
                     StdDraw.setPenColor(StdDraw.WHITE);
@@ -146,19 +146,19 @@ public class RandomExploreMaze {
         }
     }
 
-    public static char[][] generateVisual(int h, int w) {
+    public static char[][] generateVisual(int w, int h) {
         int realH = 2*h + 1;
         int realW = 2*w + 1;
-        int[][] visited = new int[h][w];
-        char[][] map = new char[realH][realW];
-        StdDraw.setCanvasSize(10*realH, 10*realW);
-        StdDraw.setXscale(0, realH);
-        StdDraw.setYscale(realW, 0);
+        int[][] visited = new int[w][h];
+        char[][] map = new char[realW][realH];
+        StdDraw.setCanvasSize(10*realW, 10*realH);
+        StdDraw.setXscale(0, realW);
+        StdDraw.setYscale(0, realH);
         StdDraw.enableDoubleBuffering();
-        for (int i = 0; i < realH; i++) // all map is block
-            for (int j = 0; j < realW; j++) {
+        for (int i = 0; i < realW; i++) // all map is block
+            for (int j = 0; j < realH; j++) {
                 map[i][j] = '#';
-                StdDraw.filledSquare(j+.5, i+.5, .5);
+                StdDraw.filledSquare(i+.5, j+.5, .5);
             }
         StdDraw.show();
         StdDraw.pause(PAUSE_TIME);
@@ -221,33 +221,34 @@ public class RandomExploreMaze {
 
     public static void imperfectIt(char[][] map, double rate) {
         // makes a perfect maze imperfect
-        int h = map.length;
-        int w = map[0].length;
-
-        for (int i = 1; i < h-1; i++) {
-            for (int j = 1; j < w-1; j++) {
-                if (map[i][j] == '#') {
-                    if (   map[i-1][j] == '#' && map[i+1][j] == '#' 
-                        && map[i][j-1] == '.' && map[i][j+1] == '.' 
-                        || map[i-1][j] == '.' && map[i+1][j] == '.' 
-                        && map[i][j-1] == '#' && map[i][j+1] == '#') {
-                        map[i][j] = StdRandom.uniform() < rate ? '.' : '#';
-                    }
-                }
+        int w = map.length;
+        int h = map[0].length;
+        // we just need to roll a coin for the space right and up. Be careful with the last line
+        for (int i = 1; i < w-1; i+=2) {
+            for (int j = 1; j < h-1; j+=2) {
+                assert map[i][j] != '#';
+                if (i < w-2 &&  map[i+1][j] == '#')  
+                    map[i+1][j] = StdRandom.uniform() < rate ? '.' : '#';
+                if (j < h-2 && map[i][j+1] == '#')  
+                    map[i][j+1] = StdRandom.uniform() < rate ? '.' : '#';
             }
         }
     }
 
     public static void main(String[] args) {
-        char[][] map = generateVisual(Integer.parseInt(args[0]),Integer.parseInt(args[1]));
+        int w = Integer.parseInt(args[0]);
+        int h = Integer.parseInt(args[1]);
+        char[][] map = generateVisual(w, h);
+        w = map.length;
+        h = map[0].length;
         printMap(map);
         StdDraw.pause(1000);
         if (args.length > 3) {
             Out out = new Out(args[3]);
-            out.println(map.length);
-            out.println(map[0].length);
-            for (int i = 0; i < map.length; i ++) {
-                for (int j = 0; j < map[0].length; j++) {
+            out.println(w);
+            out.println(h);
+            for (int j = h-1; j >= 0; j--) {
+                for (int i = 0; i < w; i ++) {
                     out.print(map[i][j]);
                 }
                 out.println();
@@ -259,9 +260,9 @@ public class RandomExploreMaze {
             Out out2 = new Out(args[4]);
             out2.println(map.length);
             out2.println(map[0].length);            
-            for (int i = 0; i < map.length; i ++) {
-                for (int j = 0; j < map[0].length; j++) {
-                    out2.print(map[j][i]);
+            for (int j = h-1; j >= 0; j--) {
+                for (int i = 0; i < w; i ++) {
+                    out2.print(map[i][j]);
                 }
                 out2.println();
             }

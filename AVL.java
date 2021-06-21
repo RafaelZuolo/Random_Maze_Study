@@ -249,6 +249,39 @@ public class AVL<Key extends Comparable<Key>, Value> {
         if (Math.abs(diff(x)) > 1) return false;
         return isAVL(x.left) && isAVL(x.right);
     }
+    
+    public Value floor(Key key) {
+        Node x = floor(root, key);
+        if (x == null) return null;
+        else return x.val;
+    } 
+
+    private Node floor(Node x, Key key) {
+        if (x == null) return null;
+        int cmp = key.compareTo(x.key);
+        if (cmp == 0) return x;
+        if (cmp <  0) return floor(x.left, key);
+        Node y = floor(x.right, key); 
+        if (y != null) return y;
+        else return x; 
+    }
+    
+    public Value ceil(Key key) {
+        Node x = ceil(root, key);
+        if (x == null) return null;
+        else return x.val;
+    } 
+
+    private Node ceil(Node x, Key key) {
+        if (x == null) return null;
+        int cmp = key.compareTo(x.key);
+        if (cmp == 0) return x;
+        if (cmp >  0) return ceil(x.right, key);
+        Node y = ceil(x.left, key); 
+        if (y != null) return y;
+        else return x; 
+    }
+    
 /***************************************************************************/
 /*               Inicio dos métodos das simulações                                     */
 /***************************************************************************/
@@ -273,6 +306,22 @@ public class AVL<Key extends Comparable<Key>, Value> {
     public int treeHeight() {
         if (root ==null) return 0;
         return root.height;
+    }
+    
+    public Iterable<Value> vals() {
+        Queue<Value>  _return = new Queue<>();
+        if (root == null) return _return;
+        vals(root.left, _return);
+        _return.enqueue(root.val);
+        vals(root.right, _return);
+        return _return;
+    }
+    
+    private void vals(Node x, Queue<Value> q) {
+        if (x == null) return;
+        vals(x.left, q);
+        q.enqueue(x.val);
+        vals(x.right, q);
     }
     
     public static void main(String[] args) {
