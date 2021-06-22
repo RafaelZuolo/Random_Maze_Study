@@ -8,6 +8,27 @@ import edu.princeton.cs.algs4.*;
 
 // vamos considerar uma ordenação das casas de acordo com a coordenada x. Em caso de
 // empate, usamos a y.
+class MapNode implements Comparable<MapNode> {
+// representaçao dos endereços com a comparação feita com o x primeiro    
+    MapNode up, down, left, right;
+    int upLength, downLength, leftLength, rightLength;
+    final int x, y; // guarda a coordenada da casa que representa: (x, y) = map[x][y]
+    
+    public MapNode(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+    
+    public int compareTo(MapNode that) {
+        if (this.x == that.x) return this.y - that.y;
+        else                  return this.x - that.x;
+    }  
+    
+    public boolean equals(MapNode that) {
+        return this.x == that.x && this.y == that.y;
+    }
+}
+
 public class MapToGraph {
     
     //private MapNode start;
@@ -85,26 +106,7 @@ public class MapToGraph {
         }
     }
      
-    public class MapNode implements Comparable<MapNode> {
-    // representaçao dos endereços com a comparação feita com o x primeiro    
-        MapNode up, down, left, right;
-        int upLength, downLength, leftLength, rightLength;
-        final int x, y; // guarda a coordenada da casa que representa: (x, y) = map[x][y]
-        
-        public MapNode(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-        
-        public int compareTo(MapNode that) {
-            if (this.x == that.x) return this.y - that.y;
-            else                  return this.x - that.x;
-        }  
-        
-        public boolean equals(MapNode that) {
-            return this.x == that.x && this.y == that.y;
-        }
-    }
+    
     
     private void addEdge(MapNode a, MapNode b) {
         if (a.equals(b)) return;
@@ -226,7 +228,7 @@ public class MapToGraph {
         MapToGraph g = new MapToGraph(map);
         
         for (MapNode node : g.nodes()) {
-            StdOut.println(node.x + " " + node.y);
+            //StdOut.println(node.x + " " + node.y);
             StdDraw.setPenColor(StdDraw.GREEN);
             StdDraw.filledCircle(node.x + .5, node.y + .5, .2);
             StdDraw.setPenColor(StdDraw.RED);

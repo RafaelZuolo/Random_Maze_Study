@@ -238,7 +238,20 @@ public class RandomExploreMaze {
     public static void main(String[] args) {
         int w = Integer.parseInt(args[0]);
         int h = Integer.parseInt(args[1]);
-        char[][] map = generateVisual(w, h);
+        
+        /* if want visualisation of the exploration, uncomment the generate visual and
+             comment the 7 lines below it
+           */
+        //char[][] map = generateVisual(w, h); 
+         
+        char[][] map = generate(w, h);
+        int realW = map.length;
+        int realH = map[0].length;
+        StdDraw.setCanvasSize(10*realW, 10*realH);
+        StdDraw.setXscale(0, realW);
+        StdDraw.setYscale(0, realH);
+        StdDraw.enableDoubleBuffering();
+
         w = map.length;
         h = map[0].length;
         printMap(map);
@@ -254,19 +267,21 @@ public class RandomExploreMaze {
                 out.println();
             }
         }
-        imperfectIt(map, Double.parseDouble(args[2]));
-        if (args.length > 4) {
-            StdDraw.clear();
-            Out out2 = new Out(args[4]);
-            out2.println(map.length);
-            out2.println(map[0].length);            
-            for (int j = h-1; j >= 0; j--) {
-                for (int i = 0; i < w; i ++) {
-                    out2.print(map[i][j]);
+        if (args.length > 2) {
+            imperfectIt(map, Double.parseDouble(args[2]));
+            if (args.length > 4) {
+                StdDraw.clear();
+                Out out2 = new Out(args[4]);
+                out2.println(map.length);
+                out2.println(map[0].length);            
+                for (int j = h-1; j >= 0; j--) {
+                    for (int i = 0; i < w; i ++) {
+                        out2.print(map[i][j]);
+                    }
+                    out2.println();
                 }
-                out2.println();
             }
+            printMap(map);
         }
-        printMap(map);
     }
 }
