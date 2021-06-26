@@ -54,6 +54,19 @@ public class MapDrawer {
         StdDraw.show();
     }
     
+    public static char[][] getCharFromStdIn() {
+        int w = Integer.parseInt(StdIn.readLine());
+        int h = Integer.parseInt(StdIn.readLine());
+        char[][] map = new char[w][h];
+        for (int y = h-1; y >=0; y--) {
+            String s = StdIn.readLine();
+            for (int x = 0; x < w; x++) {
+                map[x][y] = s.charAt(x);
+            }
+        }
+        return map;
+    }
+    
     public static void main(String[] args) {
         /* In in = new In(args[0]);
         int w = in.readInt();

@@ -242,15 +242,15 @@ public class RandomExploreMaze {
         /* if want visualisation of the exploration, uncomment the generate visual and
              comment the 7 lines below it
            */
-        //char[][] map = generateVisual(w, h); 
+        char[][] map = generateVisual(w, h); 
          
-        char[][] map = generate(w, h);
+        /* char[][] map = generate(w, h);
         int realW = map.length;
         int realH = map[0].length;
         StdDraw.setCanvasSize(10*realW, 10*realH);
         StdDraw.setXscale(0, realW);
         StdDraw.setYscale(0, realH);
-        StdDraw.enableDoubleBuffering();
+        StdDraw.enableDoubleBuffering(); */
 
         w = map.length;
         h = map[0].length;

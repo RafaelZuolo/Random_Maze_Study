@@ -1,4 +1,5 @@
 import edu.princeton.cs.algs4.*;
+import java.util.LinkedList;
 // vamos fazer um parser de labirinto retangular em .txt
 // Notamos que nem toda casa é útil para se explorar, então
 // vamos fazer um objeto que só representa as casas com
@@ -8,26 +9,6 @@ import edu.princeton.cs.algs4.*;
 
 // vamos considerar uma ordenação das casas de acordo com a coordenada x. Em caso de
 // empate, usamos a y.
-class MapNode implements Comparable<MapNode> {
-// representaçao dos endereços com a comparação feita com o x primeiro    
-    MapNode up, down, left, right;
-    int upLength, downLength, leftLength, rightLength;
-    final int x, y; // guarda a coordenada da casa que representa: (x, y) = map[x][y]
-    
-    public MapNode(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-    
-    public int compareTo(MapNode that) {
-        if (this.x == that.x) return this.y - that.y;
-        else                  return this.x - that.x;
-    }  
-    
-    public boolean equals(MapNode that) {
-        return this.x == that.x && this.y == that.y;
-    }
-}
 
 public class MapToGraph {
     
@@ -121,8 +102,8 @@ public class MapToGraph {
             } else { // a acima de b
                 b.up = a;
                 a.down = b;
-                b.upLength = deltaY;
-                a.downLength = deltaY;
+                b.upLength = -deltaY;
+                a.downLength = -deltaY;
             }
         } else {
             if (deltaX > 0) { // b esta na direita de a
@@ -133,8 +114,8 @@ public class MapToGraph {
             } else { // a esta na direita de b
                 b.right = a;
                 a.left = b;
-                b.rightLength = deltaX;
-                a.leftLength = deltaX;
+                b.rightLength = -deltaX;
+                a.leftLength = -deltaX;
             }
         }
     }
