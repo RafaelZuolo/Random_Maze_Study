@@ -56,28 +56,41 @@ public class MapPathFinding {
             current = distancePriority.poll().val;
         }
     }
-    
-    private void seeNeighbours(MapNode current) { // see Neighbours and add then to the distanceSet
+     // see Neighbours and add then to the distanceSet
+     // We use the position of the node as aditional information
+    private void seeNeighbours(MapNode current) {
         int currentLength = distanceSet.get(current);
         if (current.up != null && currentLength + current.upLength < distanceSet.get(current.up)) {
             distanceSet.put(current.up, currentLength + current.upLength);
             prevNode.put(current.up, current);
-            distancePriority.offer(new DistNode(currentLength + current.upLength, current.up));
+            distancePriority.offer(new DistNode(currentLength 
+                                        + current.upLength 
+                                        + Math.abs(current.up.x -end.x)+ Math.abs(current.up.y- end.y), // A* heuristic
+                                        current.up));
         }
         if (current.left != null && currentLength + current.leftLength < distanceSet.get(current.left)) {
             distanceSet.put(current.left, currentLength + current.leftLength);
             prevNode.put(current.left, current);
-            distancePriority.offer(new DistNode(currentLength + current.upLength, current.left));
+            distancePriority.offer(new DistNode(currentLength 
+                                        + current.leftLength
+                                        + Math.abs(current.left.x - end.x) + Math.abs(current.left.y-end.y), // A* heuristic
+                                        current.left));
         }
         if (current.down != null && currentLength + current.downLength < distanceSet.get(current.down)) {
             distanceSet.put(current.down, currentLength + current.downLength);
             prevNode.put(current.down, current);
-            distancePriority.offer(new DistNode(currentLength + current.upLength, current.down));
+            distancePriority.offer(new DistNode(currentLength 
+                                        + current.downLength
+                                        + Math.abs(current.down.x -end.x)+ Math.abs(current.down.y - end.y), // A* heuristic
+                                        current.down));
         }
         if (current.right!= null && currentLength + current.rightLength < distanceSet.get(current.right)) {
             distanceSet.put(current.right, currentLength + current.rightLength);
             prevNode.put(current.right, current);
-            distancePriority.offer(new DistNode(currentLength + current.upLength, current.right));
+            distancePriority.offer(new DistNode(currentLength 
+                                        + current.rightLength
+                                        + Math.abs(current.right.x - end.x) + Math.abs(current.right.y-end.y), // A* heuristic
+                                        current.right));
         }
     }
     
@@ -96,9 +109,10 @@ public class MapPathFinding {
         //char[][] map = MapDrawer.getCharFromStdIn();
         char[][] map;
         if (args.length > 0)
-            map = RandomDivideConquerMap.generate(40, 30);
+            map = RandomDivideConquerMap.generate(40, 25);
         else 
-            map = RandomExploreMaze.generate(40, 30);
+            map = RandomExploreMaze.generate(40, 25);
+        map = MapDrawer.imperfectIt(map, .3);
         MapPathFinding mpf = new MapPathFinding(map, 1, 1, map.length-2, map[0].length-2);
         MapDrawer.drawMap(map);
         StdDraw.setPenColor(StdDraw.RED);

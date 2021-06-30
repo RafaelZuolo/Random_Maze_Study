@@ -67,6 +67,25 @@ public class MapDrawer {
         return map;
     }
     
+    public static char[][] imperfectIt(char[][] map, double rate) {
+        // makes a perfect maze map imperfect
+        int w = map.length;
+        int h = map[0].length;
+        // we just need to roll a coin for the space right and up. Care with the borders
+        for (int i = 1; i < w-1; i+=2) {
+            for (int j = 1; j < h-1; j+=2) {
+                assert map[i][j] != '#';
+                // right wall
+                if (i+1 != w-1 &&  map[i+1][j] == '#')  
+                    map[i+1][j] = StdRandom.uniform() < rate ? '.' : '#';
+                // up wall
+                if (j+1 != h-1 && map[i][j+1] == '#')  
+                    map[i][j+1] = StdRandom.uniform() < rate ? '.' : '#';
+            }
+        }
+        return map;
+    }
+    
     public static void main(String[] args) {
         /* In in = new In(args[0]);
         int w = in.readInt();
@@ -84,6 +103,10 @@ public class MapDrawer {
             }
         }
         StdDraw.show(); */
-        drawMap(args[0]);
+        char[][] map = getCharFromStdIn();
+        drawMap(map);
+        StdDraw.pause(1000);
+        imperfectIt(map, 0.5);
+        drawMap(map);
     }
 }

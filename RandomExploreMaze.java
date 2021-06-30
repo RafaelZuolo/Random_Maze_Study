@@ -219,22 +219,6 @@ public class RandomExploreMaze {
         return;
     }
 
-    public static void imperfectIt(char[][] map, double rate) {
-        // makes a perfect maze imperfect
-        int w = map.length;
-        int h = map[0].length;
-        // we just need to roll a coin for the space right and up. Be careful with the last line
-        for (int i = 1; i < w-1; i+=2) {
-            for (int j = 1; j < h-1; j+=2) {
-                assert map[i][j] != '#';
-                if (i < w-2 &&  map[i+1][j] == '#')  
-                    map[i+1][j] = StdRandom.uniform() < rate ? '.' : '#';
-                if (j < h-2 && map[i][j+1] == '#')  
-                    map[i][j+1] = StdRandom.uniform() < rate ? '.' : '#';
-            }
-        }
-    }
-
     public static void main(String[] args) {
         int w = Integer.parseInt(args[0]);
         int h = Integer.parseInt(args[1]);
@@ -268,7 +252,7 @@ public class RandomExploreMaze {
             }
         }
         if (args.length > 2) {
-            imperfectIt(map, Double.parseDouble(args[2]));
+            MapDrawer.imperfectIt(map, Double.parseDouble(args[2]));
             if (args.length > 4) {
                 StdDraw.clear();
                 Out out2 = new Out(args[4]);
